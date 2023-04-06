@@ -32,23 +32,24 @@ def get_contact(current_user_token):
     response = contacts_schema.dump(contacts)
     return jsonify(response)
 
+# Optional
 @api.route('/contacts/<id>', methods = ['GET'])
 @token_required
-def get_contact_two(current_user_token, id):
-    fan = current_user_token.token
-    if fan == current_user_token.token:
-        contact = Contact.query.get(id)
-        response = contact_schema.dump(contact)
-        return jsonify(response)
-    else:
-        return jsonify({"message":"Valid Token Required"}), 401
+def get_single_contact(current_user_token, id):
+    # fan = current_user_token.token
+    # if fan == current_user_token.token:
+    contact = Contact.query.get(id)
+    response = contact_schema.dump(contact)
+    return jsonify(response)
+    # else:
+    return jsonify({"message":"Valid Token Required"}), 401
 
 @api.route('/contacts/<id>', methods = ['POST', 'PUT'])
 @token_required
 def update_contact(current_user_token, id):
     contact = Contact.query.get(id)
-    contact.first = request.json['first']
-    contact.last = request.json['last']
+    contact.name = request.json['name']
+    # contact.last = request.json['last']
     contact.email = request.json['email']
     contact.phone_number = request.json['phone_number']
     contact.address = request.json['address']

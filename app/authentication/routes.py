@@ -1,5 +1,5 @@
 # from forms import UserLoginForm
-from forms import UserLoginForm, UserSignInForm
+from forms import UserLoginForm
 from models import User, db, check_password_hash
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
@@ -14,13 +14,13 @@ def signup():
 
     try:
         if request.method == 'POST' and form.validate_on_submit():
-            first = form.first.data
-            last = form.last.data
+            # first = form.first.data
+            # last = form.last.data
             email = form.email.data
             password = form.password.data
             print(email, password)
 
-            user = User(first, last, email, password = password)
+            user = User( email = email, password = password)
 
             db.session.add(user)
             db.session.commit()
@@ -31,12 +31,12 @@ def signup():
             return redirect(url_for('site.home'))
     except:
         raise Exception('Invalid form data: Please check your form')
-    return render_template('signup.html', form=form)
+    return render_template('sign_up.html', form=form)
 
 
 @auth.route('/signin', methods = ['GET', 'POST'])
 def signin():
-    form = UserSignInForm()
+    form = UserLoginForm()
     
     try:
         if request.method == 'POST' and form.validate_on_submit():
@@ -54,7 +54,7 @@ def signin():
                 return redirect(url_for('auth.signin'))
     except:
         raise Exception('Invalid Form Data: Please Check your Form')
-    return render_template('signin.html', form=form)
+    return render_template('sign_in.html', form=form)
 
 @auth.route('/logout')
 def logout():
